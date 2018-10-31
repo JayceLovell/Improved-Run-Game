@@ -21,10 +21,10 @@ public class GameController : MonoBehaviour {
     private GameObject _respawnPoint;
     private GameObject[] _spooks;
     private bool _flickingstarted;
+    private int _amountOfSpooks;
 
 
     // PUBLIC INSTANCE VARIABLES
-    public int AmountOfSpooks=5;
     public GameObject Spook;
     public AudioSource GamePlaySound;
     public AudioSource OutOfBattery;
@@ -32,6 +32,17 @@ public class GameController : MonoBehaviour {
     public Image BatteryBar;
     public Light Light;
     public Light MiniMapLight;
+    public int AmountOfSpooks
+    {
+        get
+        {
+            return this._amountOfSpooks;
+        }
+        set
+        {
+            this._amountOfSpooks = value;
+        }
+    }
     public bool IsGameOver
     {
         get
@@ -150,6 +161,12 @@ public class GameController : MonoBehaviour {
         }
         //Saves score to memory
         PlayerPrefs.SetFloat("Score", TimeValue);
+        if (_amountOfSpooks == 0)
+        {
+            _amountOfSpooks = 5;
+            _spooks = new GameObject[_amountOfSpooks];
+            _spawnSpooks();
+        }
     }
     // Use this for initialization
     void Initialize()
@@ -164,10 +181,10 @@ public class GameController : MonoBehaviour {
         this.IsGameOver = false;
         this._isLightOn = true;
         this.FillAmount = 1f;
-        _spooks = new GameObject[AmountOfSpooks];
+        _amountOfSpooks = 5;
+        _spooks = new GameObject[_amountOfSpooks];
     }
     // Private METHODS*******************************
-    //SpawnSpooks
     private void _spawnSpooks()
     {
         for(int i = 0; i < _spooks.Length;i++)

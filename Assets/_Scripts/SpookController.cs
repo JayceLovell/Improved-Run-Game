@@ -131,6 +131,7 @@ public class SpookController : MonoBehaviour {
         _player.transform.position = _spawnPoint.transform.position;
         _player.transform.rotation = _spawnPoint.transform.rotation;
         _gameController.SpookLaugh.Play();
+        _gameController.AmountOfSpooks--;
         Destroy(gameObject);
     }
     //Public Methods

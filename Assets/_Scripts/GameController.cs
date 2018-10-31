@@ -18,8 +18,12 @@ public class GameController : MonoBehaviour {
     private float _lightpausevalue;
     private float timeBetweenFires = 1.0f;
     private float timeTilNextFire = 0.0f;
+    private GameObject _respawnPoint;
+    private GameObject[] _spooks;
 
     // PUBLIC INSTANCE VARIABLES
+    public int AmountOfSpooks=5;
+    public GameObject Spook;
     public AudioSource GamePlaySound;
     public AudioSource OutOfBattery;
     public AudioSource SpookLaugh;
@@ -110,17 +114,10 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        this.TimeValue = 0.0f;
-        MenuTitle.gameObject.SetActive(false);
-        BackToMainMenu.gameObject.SetActive(false);
-        Resume.gameObject.SetActive(false);
-        GameOverLable.gameObject.SetActive(false);
-        this.IsGamePause = false;
-        this.IsGameOver = false;
-        this._isLightOn = true;
-        this.FillAmount = 1f;
+        Initialize();
+        _spawnSpooks();
 	}
-	
+    
 	// Update is called once per frame
 	void Update () {
         if (!IsGamePause)
@@ -152,7 +149,30 @@ public class GameController : MonoBehaviour {
         //Saves score to memory
         PlayerPrefs.SetFloat("Score", TimeValue);
     }
+    // Use this for initialization
+    void Initialize()
+    {
+        _respawnPoint = GameObject.Find("SpookSpawn");
+        this.TimeValue = 0.0f;
+        MenuTitle.gameObject.SetActive(false);
+        BackToMainMenu.gameObject.SetActive(false);
+        Resume.gameObject.SetActive(false);
+        GameOverLable.gameObject.SetActive(false);
+        this.IsGamePause = false;
+        this.IsGameOver = false;
+        this._isLightOn = true;
+        this.FillAmount = 1f;
+        _spooks = new GameObject[AmountOfSpooks];
+    }
     // Private METHODS*******************************
+    //SpawnSpooks
+    private void _spawnSpooks()
+    {
+        for(int i = 0; i < _spooks.Length;i++)
+        {
+            _spooks[i] = Instantiate(Spook, _respawnPoint.transform.position,_respawnPoint.transform.rotation);
+        }
+    }
     private void _bringUpMenu()
     {
         IsGamePause = true;

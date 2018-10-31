@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour {
     private float timeTilNextFire = 0.0f;
     private GameObject _respawnPoint;
     private GameObject[] _spooks;
+    private bool _flickingstarted;
+
 
     // PUBLIC INSTANCE VARIABLES
     public int AmountOfSpooks=5;
@@ -123,7 +125,7 @@ public class GameController : MonoBehaviour {
         if (!IsGamePause)
         {
             this.TimeValue += Time.deltaTime;
-            UpdateBattery();
+            _updateBattery();
             timeTilNextFire -= Time.deltaTime;
         }
         if(Input.GetKeyDown(KeyCode.Escape)&&!IsGameOver)
@@ -182,18 +184,41 @@ public class GameController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    private void UpdateBattery()
+    private void _updateBattery()
     {
         if (timeTilNextFire < 0)
         {
             if (_isLightOn && !_isGameOver)
             {
-                FillAmount -= 0.05f;
+                FillAmount -= 0.02f;
                 timeTilNextFire = timeBetweenFires;
             }
         }
         BatteryBar.fillAmount = _fillAmount;
+        if (BatteryBar.fillAmount < 0.30 && BatteryBar.fillAmount > 0.01)
+        {
+            _startFlicker();
+        }
     }
+    private void _startFlicker()
+    {
+        if (!_flickingstarted)
+        {
+            StartCoroutine(Fliker());
+        }
+        _flickingstarted=true;
+    }
+    IEnumerator Fliker()
+    {
+        yield return new WaitForSeconds(0.7f);
+        Light.intensity = 0;
+        MiniMapLight.intensity = 0;
+        yield return new WaitForSeconds(0.7f);
+        MiniMapLight.intensity = 2;
+        Light.intensity = 4;
+        _flickingstarted = false;
+    }
+
     // Public METHODS*******************************
     public void BackToMainScreen()
     {

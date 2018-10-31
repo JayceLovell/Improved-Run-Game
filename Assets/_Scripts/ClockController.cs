@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
-public class Clock_Controller : MonoBehaviour {
+public class ClockController : MonoBehaviour {
 
     //PRIVATE
+    private NavMeshAgent navMeshAgent;
     private GameObject _gameControllerObject;
     private GameController _gameController;
     private GameObject _spawnPoint;
@@ -29,11 +31,16 @@ public class Clock_Controller : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        Initialize();
         _goingup = true;
+    }
+    void Initialize()
+    {
+        this.navMeshAgent = GetComponent<NavMeshAgent>();
         this._transform = this.GetComponent<Transform>();
         this._speed = 0.01f;
         this._gameControllerObject = GameObject.Find("Game Controller");
-        this._gameController = this._gameControllerObject.GetComponent<GameController> () as GameController;
+        this._gameController = this._gameControllerObject.GetComponent<GameController>() as GameController;
         this._player = GameObject.Find("Player");
         this._spawnPoint = GameObject.Find("SpawnPoint");
     }

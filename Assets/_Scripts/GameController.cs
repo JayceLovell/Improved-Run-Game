@@ -18,14 +18,31 @@ public class GameController : MonoBehaviour {
     private float _lightpausevalue;
     private float timeBetweenFires = 1.0f;
     private float timeTilNextFire = 0.0f;
+    private GameObject _respawnPoint;
+    private GameObject[] _spooks;
+    private bool _flickingstarted;
+    private int _amountOfSpooks;
+
 
     // PUBLIC INSTANCE VARIABLES
+    public GameObject Spook;
     public AudioSource GamePlaySound;
     public AudioSource OutOfBattery;
     public AudioSource SpookLaugh;
     public Image BatteryBar;
     public Light Light;
     public Light MiniMapLight;
+    public int AmountOfSpooks
+    {
+        get
+        {
+            return this._amountOfSpooks;
+        }
+        set
+        {
+            this._amountOfSpooks = value;
+        }
+    }
     public bool IsGameOver
     {
         get
@@ -110,23 +127,16 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        this.TimeValue = 0.0f;
-        MenuTitle.gameObject.SetActive(false);
-        BackToMainMenu.gameObject.SetActive(false);
-        Resume.gameObject.SetActive(false);
-        GameOverLable.gameObject.SetActive(false);
-        this.IsGamePause = false;
-        this.IsGameOver = false;
-        this._isLightOn = true;
-        this.FillAmount = 1f;
+        Initialize();
+        _spawnSpooks();
 	}
-	
+    
 	// Update is called once per frame
 	void Update () {
         if (!IsGamePause)
         {
             this.TimeValue += Time.deltaTime;
-            UpdateBattery();
+            _updateBattery();
             timeTilNextFire -= Time.deltaTime;
         }
         if(Input.GetKeyDown(KeyCode.Escape)&&!IsGameOver)
@@ -151,8 +161,37 @@ public class GameController : MonoBehaviour {
         }
         //Saves score to memory
         PlayerPrefs.SetFloat("Score", TimeValue);
+        if (_amountOfSpooks == 0)
+        {
+            _amountOfSpooks = 5;
+            _spooks = new GameObject[_amountOfSpooks];
+            _spawnSpooks();
+        }
+    }
+    // Use this for initialization
+    void Initialize()
+    {
+        _respawnPoint = GameObject.Find("SpookSpawn");
+        this.TimeValue = 0.0f;
+        MenuTitle.gameObject.SetActive(false);
+        BackToMainMenu.gameObject.SetActive(false);
+        Resume.gameObject.SetActive(false);
+        GameOverLable.gameObject.SetActive(false);
+        this.IsGamePause = false;
+        this.IsGameOver = false;
+        this._isLightOn = true;
+        this.FillAmount = 1f;
+        _amountOfSpooks = 5;
+        _spooks = new GameObject[_amountOfSpooks];
     }
     // Private METHODS*******************************
+    private void _spawnSpooks()
+    {
+        for(int i = 0; i < _spooks.Length;i++)
+        {
+            _spooks[i] = Instantiate(Spook, _respawnPoint.transform.position,_respawnPoint.transform.rotation);
+        }
+    }
     private void _bringUpMenu()
     {
         IsGamePause = true;
@@ -162,18 +201,41 @@ public class GameController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    private void UpdateBattery()
+    private void _updateBattery()
     {
         if (timeTilNextFire < 0)
         {
             if (_isLightOn && !_isGameOver)
             {
-                FillAmount -= 0.05f;
+                FillAmount -= 0.02f;
                 timeTilNextFire = timeBetweenFires;
             }
         }
         BatteryBar.fillAmount = _fillAmount;
+        if (BatteryBar.fillAmount < 0.30 && BatteryBar.fillAmount > 0.01)
+        {
+            _startFlicker();
+        }
     }
+    private void _startFlicker()
+    {
+        if (!_flickingstarted)
+        {
+            StartCoroutine(Fliker());
+        }
+        _flickingstarted=true;
+    }
+    IEnumerator Fliker()
+    {
+        yield return new WaitForSeconds(0.7f);
+        Light.intensity = 0;
+        MiniMapLight.intensity = 0;
+        yield return new WaitForSeconds(0.7f);
+        MiniMapLight.intensity = 2;
+        Light.intensity = 4;
+        _flickingstarted = false;
+    }
+
     // Public METHODS*******************************
     public void BackToMainScreen()
     {

@@ -7,6 +7,7 @@ TagManager:
   - Scare
   - Car
   - Map
+  - WayPoint
   layers:
   - Default
   - TransparentFX

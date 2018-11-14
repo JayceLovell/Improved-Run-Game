@@ -9,7 +9,7 @@ using UnityEngine.UI;
  */
 public class MainMenuScript : MonoBehaviour {
     private GameObject _gameManagerObject;
-    private GameController _gamemanager;
+    private GameManager _gameManager;
     // PUBLIC INSTANCE VARIABLES
     public AudioSource MainMenuSound;
 
@@ -23,8 +23,8 @@ public class MainMenuScript : MonoBehaviour {
     void Start () {
         VersionLabel.text = "Version: " + Application.version;
         Cursor.visible = true;
-        this._gameManagerObject = GameObject.Find("Game Manager");
-        this._gameManager = this._gameManagerObject.GetComponent<GameController>() as GameController;
+        this._gameManagerObject = GameObject.Find("GameManager");
+        _gameManager = _gameManagerObject.GetComponent<GameManager>();
     }
 	
 	// Update is called once per frame

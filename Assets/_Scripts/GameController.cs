@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour {
     public AudioSource GamePlaySound;
     public AudioSource OutOfBattery;
     public AudioSource SpookLaugh;
+    public AudioSource FlickerLight;
     public Image BatteryBar;
     public Light Light;
     public Light MiniMapLight;
@@ -86,6 +87,8 @@ public class GameController : MonoBehaviour {
             }
         }
     }
+
+  
     public float TimeValue
     {
         get
@@ -185,6 +188,7 @@ public class GameController : MonoBehaviour {
         this.FillAmount = 1f;
         _amountOfSpooks = _gameManager.AmountOfSpooks;
         _spooks = new GameObject[_amountOfSpooks];
+       
     }
     // Private METHODS*******************************
     private void _spawnSpooks()
@@ -232,13 +236,18 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(0.7f);
         Light.intensity = 0;
         MiniMapLight.intensity = 0;
+        FlickerLight.Play();
         yield return new WaitForSeconds(0.7f);
         MiniMapLight.intensity = 2;
         Light.intensity = 4;
         _flickingstarted = false;
     }
 
+  
+
     // Public METHODS*******************************
+    
+    
     public void BackToMainScreen()
     {
         SceneManager.LoadScene("MainMenu");

@@ -27,6 +27,8 @@ public class MainMenuScript : MonoBehaviour {
         this._gameManagerObject = GameObject.Find("GameManager");
         _gameManager = _gameManagerObject.GetComponent<GameManager>();
         DifficultySelector.onValueChanged.AddListener(delegate { SelectedDifficulty(DifficultySelector); });
+        //setting default
+        _gameManager.AmountOfSpooks = 5;
     }
 	
 	// Update is called once per frame

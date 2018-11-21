@@ -7,6 +7,20 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
     private GameObject _gameControllerObject;
     private GameController _gameController;
+    private int _amountOfSpooks;
+
+    public int AmountOfSpooks
+    {
+        get
+        {
+            return _amountOfSpooks;
+        }
+
+        set
+        {
+            _amountOfSpooks = value;
+        }
+    }
 
     //Awake is always called before any Start functions
     void Awake()

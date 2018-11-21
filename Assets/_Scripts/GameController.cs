@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour {
     private GameObject[] _spooks;
     private bool _flickingstarted;
     private int _amountOfSpooks;
+    private GameManager _gameManager;
 
 
     // PUBLIC INSTANCE VARIABLES
@@ -171,6 +172,7 @@ public class GameController : MonoBehaviour {
     // Use this for initialization
     void Initialize()
     {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _respawnPoint = GameObject.Find("SpookSpawn");
         this.TimeValue = 0.0f;
         MenuTitle.gameObject.SetActive(false);
@@ -181,7 +183,7 @@ public class GameController : MonoBehaviour {
         this.IsGameOver = false;
         this._isLightOn = true;
         this.FillAmount = 1f;
-        _amountOfSpooks = 5;
+        _amountOfSpooks = _gameManager.AmountOfSpooks;
         _spooks = new GameObject[_amountOfSpooks];
     }
     // Private METHODS*******************************

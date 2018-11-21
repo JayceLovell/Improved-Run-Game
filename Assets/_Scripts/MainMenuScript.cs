@@ -12,6 +12,7 @@ public class MainMenuScript : MonoBehaviour {
     private GameManager _gameManager;
     // PUBLIC INSTANCE VARIABLES
     public AudioSource MainMenuSound;
+    public Dropdown DifficultySelector;
 
     [Header("Text")]
     public Text VersionLabel;
@@ -25,6 +26,7 @@ public class MainMenuScript : MonoBehaviour {
         Cursor.visible = true;
         this._gameManagerObject = GameObject.Find("GameManager");
         _gameManager = _gameManagerObject.GetComponent<GameManager>();
+        DifficultySelector.onValueChanged.AddListener(delegate { SelectedDifficulty(DifficultySelector); });
     }
 	
 	// Update is called once per frame
@@ -40,5 +42,22 @@ public class MainMenuScript : MonoBehaviour {
     public void Close_Game()
     {
         Application.Quit();
+    }
+    void SelectedDifficulty(Dropdown target)
+    {
+        switch (target.value)
+        {
+            case 0:
+                break;
+            case 1:
+                _gameManager.AmountOfSpooks = 5;
+                break;
+            case 2:
+                _gameManager.AmountOfSpooks = 7;
+                break;
+            case 3:
+                _gameManager.AmountOfSpooks = 10;
+                break;
+        }
     }
 }

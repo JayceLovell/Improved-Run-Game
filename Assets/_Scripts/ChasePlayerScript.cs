@@ -15,7 +15,9 @@ public class ChasePlayerScript : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	
+		NavMeshAgent navMeshAgent = animator.gameObject.GetComponent<NavMeshAgent>();
+        	navMeshAgent.SetDestination(GameObject.Find("Player").transform.position);
+        	navMeshAgent.speed++;
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
